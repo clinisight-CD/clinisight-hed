@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HED Intake Form — CliniSight</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy: #0d1b2a;
+    --teal: #1a6b6b;
+    --teal-light: #e8f5f5;
+    --teal-mid: #2a9090;
+    --gold: #c8922a;
+    --gold-light: #fdf6e8;
+    --red: #8b2020;
+    --red-light: #fdf0f0;
+    --green: #1a5c2a;
+    --green-light: #edf7ee;
+    --slate: #3d4f5c;
+    --silver: #b8c4cc;
+    --off-white: #f7f8f9;
+    --white: #ffffff;
+    --border: #dde3e8;
+    --text: #1a2530;
+    --muted: #5a6a78;
+    --radius: 6px;
+    --section-gap: 2rem;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    color: white;
+    padding: 1.5rem 2rem 1.2rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .header-brand { display: flex; flex-direction: column; gap: 0.2rem; }
+  .brand-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.02em;
+    color: #e8f5f5;
+  }
+  .brand-sub { font-size: 0.72rem; color: var(--silver); letter-spacing: 0.08em; text-transform: uppercase; }
+  .header-meta { text-align: right; font-size: 0.72rem; color: var(--silver); line-height: 1.8; }
+  .header-meta strong { color: #e8f5f5; }
+
+  /* ── HIPAA BANNER ── */
+  .hipaa-banner {
+    background: var(--red-light);
+    border-left: 4px solid var(--red);
+    padding: 0.75rem 2rem;
+    font-size: 0.78rem;
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 500;
+  }
+  .hipaa-banner .icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── SECTION ── */
+  .section {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .section-header {
+    background: var(--navy);
+    color: white;
+    padding: 0.65rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .section-num {
+    background: var(--teal-mid);
+    color: white;
+    font-size: 0.68rem;
+    font-weight: 600;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+  }
+  .section-body { padding: 1.25rem 1.25rem 1.5rem; }
+
+  /* ── GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 0.75rem; }
+  .col-span-2 { grid-column: span 2; }
+  .col-span-3 { grid-column: span 3; }
+
+  /* ── FIELD ── */
+  .field { display: flex; flex-direction: column; gap: 0.3rem; }
+  .field label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .field label .req { color: var(--red); }
+  .field input[type="text"],
+  .field input[type="number"],
+  .field input[type="date"],
+  .field select,
+  .field textarea {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.5rem 0.7rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text);
+    background: var(--off-white);
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--teal-mid);
+    background: var(--white);
+  }
+  .field textarea { resize: vertical; min-height: 70px; }
+  .field .hint {
+    font-size: 0.68rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ── INLINE LABEL (checkbox/radio groups) ── */
+  .check-group, .radio-group {
+    display: flex; flex-wrap: wrap; gap: 0.4rem 0.75rem; padding-top: 0.2rem;
+  }
+  .check-group label, .radio-group label {
+    display: flex; align-items: center; gap: 0.35rem;
+    font-size: 0.82rem; font-weight: 400;
+    color: var(--text);
+    text-transform: none; letter-spacing: 0;
+    cursor: pointer;
+  }
+  .check-group input, .radio-group input { accent-color: var(--teal-mid); }
+
+  /* ── SCALE ROW ── */
+  .scale-row {
+    display: flex; gap: 0.4rem; flex-wrap: wrap;
+  }
+  .scale-btn {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.35rem 0.65rem;
+    font-size: 0.8rem;
+    background: var(--off-white);
+    cursor: pointer;
+    color: var(--text);
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .scale-btn:hover { border-color: var(--teal-mid); background: var(--teal-light); }
+  .scale-btn.active { border-color: var(--teal); background: var(--teal); color: white; font-weight: 600; }
+
+  /* ── LCD PATHWAY TABS ── */
+  .pathway-tabs {
+    display: flex; gap: 0; border-bottom: 2px solid var(--border);
+    flex-wrap: wrap;
+    padding: 0 1.25rem;
+    background: #f0f3f5;
+  }
+  .pathway-tab {
+    padding: 0.6rem 1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .pathway-tab:hover { color: var(--teal); }
+  .pathway-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+  .pathway-panel { display: none; padding: 1.25rem 1.25rem 1.5rem; }
+  .pathway-panel.active { display: block; }
+
+  /* ── SUBSECTION ── */
+  .subsection {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .subsection-header {
+    background: var(--teal-light);
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 0.9rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .subsection-body { padding: 1rem 0.9rem; }
+
+  /* ── FAST SCALE ── */
+  .fast-scale {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .fast-row {
+    display: grid;
+    grid-template-columns: 60px 80px 1fr 120px;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .fast-row:last-child { border-bottom: none; }
+  .fast-row:hover { background: var(--teal-light); }
+  .fast-row.selected { background: var(--teal-light); }
+  .fast-row.selected .fast-stage { background: var(--teal); color: white; }
+  .fast-stage {
+    text-align: center;
+    padding: 0.6rem 0.3rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--teal);
+    border-right: 1px solid var(--border);
+    background: #f5fafa;
+    transition: all 0.15s;
+  }
+  .fast-sub {
+    text-align: center;
+    padding: 0.6rem 0.3rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    border-right: 1px solid var(--border);
+  }
+  .fast-desc {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.78rem;
+    color: var(--text);
+    border-right: 1px solid var(--border);
+  }
+  .fast-hospice {
+    padding: 0.6rem 0.5rem;
+    font-size: 0.68rem;
+    text-align: center;
+    font-weight: 600;
+  }
+  .hospice-yes { color: var(--green); }
+  .hospice-no { color: var(--muted); }
+  .fast-header {
+    display: grid;
+    grid-template-columns: 60px 80px 1fr 120px;
+    background: var(--navy);
+    color: white;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+  .fast-header span {
+    padding: 0.4rem 0.5rem;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .fast-header span:last-child { border-right: none; }
+
+  /* ── VERDICT BOX ── */
+  .verdict-box {
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin-top: 1.5rem;
+    border: 1px solid;
+    display: none;
+  }
+  .verdict-box.show { display: block; }
+  .verdict-box.eligible { background: var(--green-light); border-color: var(--green); color: var(--green); }
+  .verdict-box.borderline { background: var(--gold-light); border-color: var(--gold); color: #7a5510; }
+  .verdict-box.not-eligible { background: var(--red-light); border-color: var(--red); color: var(--red); }
+  .verdict-label { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .verdict-detail { font-size: 0.8rem; margin-top: 0.4rem; color: var(--text); }
+
+  /* ── BUTTONS ── */
+  .btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 2rem; }
+  .btn {
+    padding: 0.65rem 1.5rem;
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    letter-spacing: 0.02em;
+  }
+  .btn-primary { background: var(--teal); color: white; }
+  .btn-primary:hover { background: var(--teal-mid); }
+  .btn-secondary { background: white; color: var(--teal); border: 1px solid var(--teal); }
+  .btn-secondary:hover { background: var(--teal-light); }
+  .btn-print { background: var(--navy); color: white; }
+  .btn-print:hover { background: var(--slate); }
+
+  /* ── REGULATORY FOOTER ── */
+  .reg-footer {
+    background: var(--navy);
+    color: var(--silver);
+    padding: 1rem 2rem;
+    font-size: 0.68rem;
+    line-height: 1.8;
+    text-align: center;
+  }
+  .reg-footer strong { color: #e8f5f5; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none; border-top: 1px solid var(--border);
+    margin: 1rem 0;
+  }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    body { background: white; font-size: 11pt; }
+    .header { background: white !important; color: black !important; border-bottom: 2pt solid #0d1b2a; }
+    .brand-name, .brand-sub, .header-meta, .header-meta strong { color: black !important; }
+    .hipaa-banner { border-left: 3pt solid #8b2020; background: #fff0f0 !important; -webkit-print-color-adjust: exact; }
+    .section-header { background: #0d1b2a !important; -webkit-print-color-adjust: exact; }
+    .pathway-tabs, .btn-row, #run-hed { display: none !important; }
+    .pathway-panel { display: block !important; page-break-inside: avoid; }
+    .fast-header { background: #0d1b2a !important; -webkit-print-color-adjust: exact; }
+    .section { page-break-inside: avoid; }
+    .main { padding: 0; }
+    .reg-footer { font-size: 8pt; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-brand">
+    <div class="brand-name">CliniSight</div>
+    <div class="brand-sub">Hospice Eligibility Detection (HED) — Structured Intake Form</div>
+  </div>
+  <div class="header-meta">
+    <div><strong>Version:</strong> 1.0 &nbsp;|&nbsp; <strong>Engine:</strong> HED</div>
+    <div><strong>Regulatory Basis:</strong> 42 CFR §418.22 · CMS MBPM Ch. 9</div>
+    <div><strong>De-identification Standard:</strong> 45 CFR §164.514(b)</div>
+  </div>
+</div>
+
+<!-- HIPAA BANNER -->
+<div class="hipaa-banner">
+  <span class="icon">⚠</span>
+  <span><strong>PHI-FREE ZONE:</strong> Do NOT enter patient name, date of birth, MRN, Social Security Number, facility name, address, or any other HIPAA identifier (45 CFR §164.514). Enter clinical facts only. This form is designed for safe AI-assisted review.</span>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- SECTION 1: Case Tracking -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">Case Tracking — No PHI Identifiers</div>
+    </div>
+    <div class="section-body">
+      <div class="grid-3">
+        <div class="field">
+          <label>Case Reference Code <span class="req">*</span></label>
+          <input type="text" placeholder="e.g. HED-2026-0041">
+          <span class="hint">Clinician-assigned internal code only. No patient name.</span>
+        </div>
+        <div class="field">
+          <label>Review Date <span class="req">*</span></label>
+          <input type="date">
+        </div>
+        <div class="field">
+          <label>Reviewer Role</label>
+          <select>
+            <option value="">Select...</option>
+            <option>RNCM</option>
+            <option>IDG Member</option>
+            <option>Admissions Coordinator</option>
+            <option>QA/Compliance</option>
+            <option>Medical Director</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Hospice Enrollment Status</label>
+          <select>
+            <option value="">Select...</option>
+            <option>Referral — Pre-admission evaluation</option>
+            <option>Enrolled — Routine recertification</option>
+            <option>Enrolled — IDG review</option>
+            <option>Post-discharge audit review</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Current Benefit Period</label>
+          <select>
+            <option value="">Select...</option>
+            <option>Period 1 (days 1–90)</option>
+            <option>Period 2 (days 91–180)</option>
+            <option>Period 3+ (60-day renewal)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Days on Hospice (approximate)</label>
+          <input type="number" placeholder="e.g. 74" min="0">
+          <span class="hint">Relative duration only — not an identifier.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Primary Diagnosis & LCD Pathway -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">Primary Diagnosis & LCD Pathway</div>
+    </div>
+    <div class="section-body">
+      <div class="grid-2" style="margin-bottom:1rem">
+        <div class="field">
+          <label>Primary Terminal Diagnosis <span class="req">*</span></label>
+          <input type="text" placeholder="e.g. End-stage dementia, CHF NYHA IV, ESRD on comfort measures">
+        </div>
+        <div class="field">
+          <label>ICD-10 Code (if known)</label>
+          <input type="text" placeholder="e.g. F03.90, I50.9, N18.6">
+        </div>
+        <div class="field">
+          <label>Secondary Diagnoses / Comorbidities</label>
+          <input type="text" placeholder="e.g. HTN, T2DM, PVD, recurrent UTI">
+        </div>
+        <div class="field">
+          <label>Applicable LCD Pathway(s) <span class="req">*</span></label>
+          <div class="check-group">
+            <label><input type="checkbox" name="lcd" value="dementia"> L33393 Dementia</label>
+            <label><input type="checkbox" name="lcd" value="heart"> L33614 Heart Disease</label>
+            <label><input type="checkbox" name="lcd" value="renal"> L33946 Renal Disease</label>
+            <label><input type="checkbox" name="lcd" value="stroke"> L33393 Stroke/Coma</label>
+            <label><input type="checkbox" name="lcd" value="other"> Other (specify below)</label>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Other Diagnosis / Free-Text LCD Narrative</label>
+        <textarea placeholder="Describe non-standard terminal diagnosis, trajectory, or multi-morbidity context relevant to eligibility determination..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Functional Scoring -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">Functional Scoring — All Scales</div>
+    </div>
+
+    <!-- PPS -->
+    <div class="section-body" style="padding-bottom:0.5rem">
+      <div class="subsection">
+        <div class="subsection-header">Palliative Performance Scale (PPS)</div>
+        <div class="subsection-body">
+          <div class="grid-2">
+            <div class="field">
+              <label>Current PPS Score <span class="req">*</span></label>
+              <div class="scale-row" id="pps-row">
+                <button class="scale-btn" onclick="selectScale('pps',this,'100%')">100%</button>
+                <button class="scale-btn" onclick="selectScale('pps',this,'90%')">90%</button>
+                <button class="scale-btn" onclick="selectScale('pps',this,'80%')">80%</button>
+                <button class="scale-btn" onclick="selectScale('pps',this,'70%')">70%</button>
+                <button class="scale-btn" onclick="selectScale('pps',this,'60%')">60%</button>
+                <button class="scale-btn" onclick="selectScale('pps',this,'50%')">50%</button>
+                <button class="scale-btn" onclick="selectScale('pps',this,'40%')">40%</button>
+                <button class="scale-btn" onclick="selectScale('pps',this,'30%')">30%</button>
+                <button class="scale-btn" onclick="selectScale('pps',this,'20%')">20%</button>
+                <button class="scale-btn" onclick="selectScale('pps',this,'10%')">10%</button>
+                <button class="scale-btn" onclick="selectScale('pps',this,'0%')">0%</button>
+              </div>
+              <span class="hint">≤70% often supports hospice eligibility. ≤50% strongly supports.</span>
+            </div>
+            <div class="field">
+              <label>PPS Trend (last 30–90 days)</label>
+              <select>
+                <option value="">Select...</option>
+                <option>Declining — rapid (≥20% drop in 30 days)</option>
+                <option>Declining — gradual (10–20% over 60–90 days)</option>
+                <option>Stable</option>
+                <option>Fluctuating</option>
+                <option>Improving</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Karnofsky -->
+      <div class="subsection">
+        <div class="subsection-header">Karnofsky Performance Status (KPS)</div>
+        <div class="subsection-body">
+          <div class="grid-2">
+            <div class="field">
+              <label>Current Karnofsky Score</label>
+              <div class="scale-row">
+                <button class="scale-btn" onclick="selectScale('kps',this,'100')">100</button>
+                <button class="scale-btn" onclick="selectScale('kps',this,'90')">90</button>
+                <button class="scale-btn" onclick="selectScale('kps',this,'80')">80</button>
+                <button class="scale-btn" onclick="selectScale('kps',this,'70')">70</button>
+                <button class="scale-btn" onclick="selectScale('kps',this,'60')">60</button>
+                <button class="scale-btn" onclick="selectScale('kps',this,'50')">50</button>
+                <button class="scale-btn" onclick="selectScale('kps',this,'40')">40</button>
+                <button class="scale-btn" onclick="selectScale('kps',this,'30')">30</button>
+                <button class="scale-btn" onclick="selectScale('kps',this,'20')">20</button>
+                <button class="scale-btn" onclick="selectScale('kps',this,'10')">10</button>
+              </div>
+              <span class="hint">≤50 generally supports hospice eligibility (CMS MBPM Ch. 9).</span>
+            </div>
+            <div class="field">
+              <label>KPS Descriptor</label>
+              <select>
+                <option value="">Select...</option>
+                <option>Normal, no complaints (100)</option>
+                <option>Minor signs, normal activity (90)</option>
+                <option>Normal with effort, some signs (80)</option>
+                <option>Cares for self, unable to work (70)</option>
+                <option>Requires occasional assistance (60)</option>
+                <option>Requires considerable assistance (50)</option>
+                <option>Disabled, requires special care (40)</option>
+                <option>Severely disabled, hospitalization indicated (30)</option>
+                <option>Very sick, active supportive care (20)</option>
+                <option>Moribund (10)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NYHA -->
+      <div class="subsection">
+        <div class="subsection-header">NYHA Classification (Cardiac) — LCD L33614</div>
+        <div class="subsection-body">
+          <div class="grid-2">
+            <div class="field">
+              <label>NYHA Class</label>
+              <div class="radio-group">
+                <label><input type="radio" name="nyha" value="I"> Class I — No limitation</label>
+                <label><input type="radio" name="nyha" value="II"> Class II — Slight limitation</label>
+                <label><input type="radio" name="nyha" value="III"> Class III — Marked limitation</label>
+                <label><input type="radio" name="nyha" value="IV"> Class IV — Symptoms at rest</label>
+              </div>
+              <span class="hint">NYHA Class IV required for heart disease LCD eligibility pathway.</span>
+            </div>
+            <div class="field">
+              <label>EF (Ejection Fraction) if documented</label>
+              <input type="text" placeholder="e.g. EF 20%, not documented">
+              <span class="hint">EF ≤20% supports eligibility (LCD L33614). Not required if NYHA IV documented.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAST Scale -->
+      <div class="subsection">
+        <div class="subsection-header">FAST Scale — Functional Assessment Staging Tool (Dementia) — LCD L33393</div>
+        <div class="subsection-body">
+          <p style="font-size:0.75rem; color:var(--muted); margin-bottom:0.75rem;">Click the row that best describes current functional stage. FAST 7A or above required for LCD L33393 dementia pathway.</p>
+          <div class="fast-scale">
+            <div class="fast-header">
+              <span>Stage</span><span>Substage</span><span>Description</span><span>Hospice Threshold</span>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'1','','Normal adult')">
+              <div class="fast-stage">1</div><div class="fast-sub">—</div>
+              <div class="fast-desc">Normal adult — no functional deficit</div>
+              <div class="fast-hospice hospice-no">Below threshold</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'2','','Normal older adult — some forgetfulness')">
+              <div class="fast-stage">2</div><div class="fast-sub">—</div>
+              <div class="fast-desc">Normal older adult — subjective forgetfulness only</div>
+              <div class="fast-hospice hospice-no">Below threshold</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'3','','Early dementia — job difficulties')">
+              <div class="fast-stage">3</div><div class="fast-sub">—</div>
+              <div class="fast-desc">Early dementia — decreased job functioning, word finding deficits</div>
+              <div class="fast-hospice hospice-no">Below threshold</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'4','','Moderate — manages finances/IADLs with help')">
+              <div class="fast-stage">4</div><div class="fast-sub">—</div>
+              <div class="fast-desc">Moderate dementia — decreased ability to handle finances, IADLs, complex tasks</div>
+              <div class="fast-hospice hospice-no">Below threshold</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'5','','Moderately severe — needs help selecting clothing')">
+              <div class="fast-stage">5</div><div class="fast-sub">—</div>
+              <div class="fast-desc">Moderately severe — requires assistance choosing proper attire</div>
+              <div class="fast-hospice hospice-no">Below threshold</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'6','A','Needs help dressing')">
+              <div class="fast-stage">6</div><div class="fast-sub">A</div>
+              <div class="fast-desc">Needs assistance dressing</div>
+              <div class="fast-hospice hospice-no">Below threshold</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'6','B','Needs help bathing')">
+              <div class="fast-stage">6</div><div class="fast-sub">B</div>
+              <div class="fast-desc">Needs assistance with bathing properly</div>
+              <div class="fast-hospice hospice-no">Below threshold</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'6','C','Needs help with toileting')">
+              <div class="fast-stage">6</div><div class="fast-sub">C</div>
+              <div class="fast-desc">Needs assistance with mechanics of toileting (wiping, adjusting clothing)</div>
+              <div class="fast-hospice hospice-no">Below threshold</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'6','D','Urinary incontinence')">
+              <div class="fast-stage">6</div><div class="fast-sub">D</div>
+              <div class="fast-desc">Urinary incontinence — occasional or more frequent</div>
+              <div class="fast-hospice hospice-no">Below threshold</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'6','E','Fecal incontinence')">
+              <div class="fast-stage">6</div><div class="fast-sub">E</div>
+              <div class="fast-desc">Fecal incontinence — occasional or more frequent</div>
+              <div class="fast-hospice hospice-no">Below threshold</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'7','A','Vocabulary limited to ~6 words')">
+              <div class="fast-stage">7</div><div class="fast-sub">A</div>
+              <div class="fast-desc">Speech limited to approximately 6 or fewer intelligible words per day</div>
+              <div class="fast-hospice hospice-yes">✓ THRESHOLD MET</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'7','B','Vocabulary limited to 1 word')">
+              <div class="fast-stage">7</div><div class="fast-sub">B</div>
+              <div class="fast-desc">Speech limited to a single intelligible word per day</div>
+              <div class="fast-hospice hospice-yes">✓ Met</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'7','C','Cannot walk without assistance')">
+              <div class="fast-stage">7</div><div class="fast-sub">C</div>
+              <div class="fast-desc">Loss of ambulatory ability — cannot walk without personal assistance</div>
+              <div class="fast-hospice hospice-yes">✓ Met</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'7','D','Cannot sit up independently')">
+              <div class="fast-stage">7</div><div class="fast-sub">D</div>
+              <div class="fast-desc">Cannot sit up independently — will fall if not supported</div>
+              <div class="fast-hospice hospice-yes">✓ Met</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'7','E','Cannot smile')">
+              <div class="fast-stage">7</div><div class="fast-sub">E</div>
+              <div class="fast-desc">Loss of ability to smile — facial expression severely blunted</div>
+              <div class="fast-hospice hospice-yes">✓ Met</div>
+            </div>
+            <div class="fast-row" onclick="selectFast(this,'7','F','Cannot hold head up')">
+              <div class="fast-stage">7</div><div class="fast-sub">F</div>
+              <div class="fast-desc">Cannot hold head up independently</div>
+              <div class="fast-hospice hospice-yes">✓ Met</div>
+            </div>
+          </div>
+          <div class="field" style="margin-top:0.75rem">
+            <label>Selected FAST Stage</label>
+            <input type="text" id="fast-display" placeholder="Click a row above to select..." readonly style="background:#f0f8f0; border-color: var(--teal);">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: LCD-Specific Clinical Criteria -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">LCD-Specific Clinical Criteria</div>
+    </div>
+    <div class="pathway-tabs">
+      <div class="pathway-tab active" onclick="showPanel('dementia',this)">Dementia L33393</div>
+      <div class="pathway-tab" onclick="showPanel('heart',this)">Heart Disease L33614</div>
+      <div class="pathway-tab" onclick="showPanel('renal',this)">Renal Disease L33946</div>
+      <div class="pathway-tab" onclick="showPanel('stroke',this)">Stroke/Coma</div>
+      <div class="pathway-tab" onclick="showPanel('other-lcd',this)">Other Diagnosis</div>
+    </div>
+
+    <!-- DEMENTIA PANEL -->
+    <div class="pathway-panel active" id="panel-dementia">
+      <div class="subsection">
+        <div class="subsection-header">Dementia — LCD L33393 Required Clinical Indicators</div>
+        <div class="subsection-body">
+          <div class="grid-2">
+            <div class="field">
+              <label>Aspiration / Dysphagia documented?</label>
+              <select><option>Select...</option><option>Yes — aspiration pneumonia history</option><option>Yes — dysphagia, modified diet or tube feeds</option><option>No</option><option>Not documented</option></select>
+            </div>
+            <div class="field">
+              <label>Recurrent infections in past 12 months</label>
+              <select><option>Select...</option><option>Aspiration pneumonia — 1 episode</option><option>Aspiration pneumonia — 2+ episodes</option><option>Recurrent UTI</option><option>Pressure ulcer with infection</option><option>Sepsis</option><option>None documented</option></select>
+            </div>
+            <div class="field">
+              <label>Nutritional status</label>
+              <select><option>Select...</option><option>Significant weight loss (≥10% in 6 months)</option><option>Albumin ≤2.5 g/dL</option><option>Refuses food / minimal oral intake</option><option>Tube-fed (PEG/NG)</option><option>Stable oral intake</option></select>
+            </div>
+            <div class="field">
+              <label>Pressure injuries present?</label>
+              <select><option>Select...</option><option>Stage III or IV pressure injury</option><option>Multiple Stage II injuries</option><option>None</option></select>
+            </div>
+            <div class="field col-span-2">
+              <label>Additional complicating conditions (check all that apply)</label>
+              <div class="check-group">
+                <label><input type="checkbox"> Fever recurrent despite antibiotics</label>
+                <label><input type="checkbox"> Dehydration — not artificially administered</label>
+                <label><input type="checkbox"> Contractures severe enough to restrict ADLs</label>
+                <label><input type="checkbox"> Incontinence — bowel and bladder</label>
+                <label><input type="checkbox"> Pain requiring consistent pharmacologic management</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEART DISEASE PANEL -->
+    <div class="pathway-panel" id="panel-heart">
+      <div class="subsection">
+        <div class="subsection-header">Heart Disease — LCD L33614 Required Clinical Indicators</div>
+        <div class="subsection-body">
+          <div class="grid-2">
+            <div class="field">
+              <label>NYHA Class confirmed (from Section 3)</label>
+              <select><option>Select...</option><option>Class IV — symptoms at rest (required)</option><option>Class III — awaiting confirmation</option></select>
+            </div>
+            <div class="field">
+              <label>Optimally treated? (or treatment declined/not tolerated)</label>
+              <select><option>Select...</option><option>Yes — maximal tolerated therapy</option><option>Patient declined further treatment</option><option>Not a candidate for procedures</option><option>Comfort-focused only by choice</option></select>
+            </div>
+            <div class="field">
+              <label>Significant symptoms at rest</label>
+              <div class="check-group">
+                <label><input type="checkbox"> Dyspnea at rest</label>
+                <label><input type="checkbox"> Chest pain at rest</label>
+                <label><input type="checkbox"> Syncope episodes</label>
+                <label><input type="checkbox"> Peripheral edema despite diuresis</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Ejection Fraction trend</label>
+              <select><option>Select...</option><option>EF ≤20% documented</option><option>EF 21–35% documented</option><option>EF not recently measured</option><option>HFpEF — preserved EF with NYHA IV symptoms</option></select>
+            </div>
+            <div class="field">
+              <label>Recent hospitalizations for cardiac decompensation</label>
+              <select><option>Select...</option><option>None in 12 months</option><option>1 hospitalization in 12 months</option><option>2+ hospitalizations in 12 months</option><option>3+ hospitalizations — frequent flyer pattern</option></select>
+            </div>
+            <div class="field">
+              <label>Device status (pacemaker/ICD)</label>
+              <select><option>Select...</option><option>No device</option><option>Pacemaker — not deactivated</option><option>ICD — patient declined deactivation</option><option>ICD — deactivated per patient wish</option><option>LVAD — not a candidate for transplant</option></select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RENAL PANEL -->
+    <div class="pathway-panel" id="panel-renal">
+      <div class="subsection">
+        <div class="subsection-header">Renal Disease — LCD L33946 Required Clinical Indicators</div>
+        <div class="subsection-body">
+          <div class="grid-2">
+            <div class="field">
+              <label>Dialysis status <span class="req">*</span></label>
+              <select><option>Select...</option><option>Dialysis discontinued by patient choice</option><option>Never initiated — patient declined</option><option>Not a medical candidate for dialysis</option><option>On dialysis — not applicable to this pathway</option></select>
+            </div>
+            <div class="field">
+              <label>Most recent creatinine (approximate)</label>
+              <input type="text" placeholder="e.g. Cr ~6.8, or 'not recently drawn'">
+            </div>
+            <div class="field">
+              <label>eGFR trend</label>
+              <select><option>Select...</option><option>eGFR &lt;10 mL/min (CKD Stage 5)</option><option>eGFR 10–15 mL/min — rapidly declining</option><option>eGFR stable below 15</option><option>Not recently measured</option></select>
+            </div>
+            <div class="field">
+              <label>Uremic symptoms present</label>
+              <div class="check-group">
+                <label><input type="checkbox"> Uremic encephalopathy</label>
+                <label><input type="checkbox"> Intractable nausea/vomiting</label>
+                <label><input type="checkbox"> Generalized pruritis</label>
+                <label><input type="checkbox"> Hyperkalemia refractory to treatment</label>
+                <label><input type="checkbox"> Fluid overload refractory to diuretics</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Complicating conditions</label>
+              <div class="check-group">
+                <label><input type="checkbox"> Mechanical ventilation refused</label>
+                <label><input type="checkbox"> Malignancy with renal involvement</label>
+                <label><input type="checkbox"> Chronic lung disease co-diagnosis</label>
+                <label><input type="checkbox"> Cardiac disease co-diagnosis</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STROKE PANEL -->
+    <div class="pathway-panel" id="panel-stroke">
+      <div class="subsection">
+        <div class="subsection-header">Stroke / Coma — LCD L33393 Indicators</div>
+        <div class="subsection-body">
+          <div class="grid-2">
+            <div class="field">
+              <label>Coma — characteristics</label>
+              <div class="check-group">
+                <label><input type="checkbox"> Eyes closed continuously</label>
+                <label><input type="checkbox"> No verbal response to pain</label>
+                <label><input type="checkbox"> No voluntary movement to pain</label>
+                <label><input type="checkbox"> Day 3+ post-event meeting all three above</label>
+              </div>
+              <span class="hint">All three on day 3+ = strong eligibility indicator per LCD.</span>
+            </div>
+            <div class="field">
+              <label>Post-stroke deficits (non-coma)</label>
+              <div class="check-group">
+                <label><input type="checkbox"> Dysphagia with aspiration risk</label>
+                <label><input type="checkbox"> Hemiplegia/hemiparesis — functional</label>
+                <label><input type="checkbox"> Post-stroke dementia</label>
+                <label><input type="checkbox"> Bowel/bladder incontinence</label>
+                <label><input type="checkbox"> Inability to communicate</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Imaging findings documented (type only, no report)</label>
+              <select><option>Select...</option><option>Massive hemorrhagic stroke</option><option>Massive ischemic infarct</option><option>Brainstem involvement</option><option>Bilateral cortical involvement</option><option>Not recently imaged</option></select>
+            </div>
+            <div class="field">
+              <label>Nutritional/functional status post-stroke</label>
+              <select><option>Select...</option><option>PEG placed — declining oral intake</option><option>Refuses nutritional support</option><option>Weight loss ≥10% in 6 months</option><option>Albumin ≤2.5</option><option>Adequate intake maintained</option></select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OTHER LCD PANEL -->
+    <div class="pathway-panel" id="panel-other-lcd">
+      <div class="subsection">
+        <div class="subsection-header">Other Terminal Diagnosis — Free-Text Clinical Narrative</div>
+        <div class="subsection-body">
+          <div class="field">
+            <label>Diagnosis category</label>
+            <select>
+              <option>Select...</option>
+              <option>COPD / Pulmonary Disease (LCD L33941)</option>
+              <option>Liver Disease (LCD L33393)</option>
+              <option>HIV Disease (LCD L33393)</option>
+              <option>ALS / Neurological Disease (LCD L33393)</option>
+              <option>Cancer — solid tumor</option>
+              <option>Cancer — hematologic</option>
+              <option>Debility / Failure to Thrive</option>
+              <option>Other — specify below</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Clinical trajectory narrative — no PHI, clinical facts only</label>
+            <textarea style="min-height:120px" placeholder="Describe: disease stage, functional trajectory, weight loss, hospitalizations, response to treatment, patient goals, physician attestation basis, comorbidities contributing to terminal prognosis. Avoid all patient identifiers."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: Decline Trajectory -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">Decline Trajectory & Supporting Clinical Evidence</div>
+    </div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="field">
+          <label>Hospitalizations in prior 6 months</label>
+          <select><option>Select...</option><option>None</option><option>1 hospitalization</option><option>2 hospitalizations</option><option>3+ hospitalizations</option><option>ER visits only — no admissions</option></select>
+        </div>
+        <div class="field">
+          <label>ER visits in prior 6 months</label>
+          <select><option>Select...</option><option>None</option><option>1 visit</option><option>2 visits</option><option>3+ visits</option></select>
+        </div>
+        <div class="field">
+          <label>Weight loss in last 6 months</label>
+          <select><option>Select...</option><option>None documented</option><option>&lt;5% body weight</option><option>5–10% body weight</option><option>&gt;10% body weight (significant)</option><option>Not documented</option></select>
+        </div>
+        <div class="field">
+          <label>Most recent albumin level</label>
+          <input type="text" placeholder="e.g. 2.3 g/dL, or 'not drawn recently'">
+          <span class="hint">Albumin ≤2.5 supports nutritional decline indicator.</span>
+        </div>
+        <div class="field col-span-2">
+          <label>Clinical trajectory summary — 30/60/90 day pattern (no PHI)</label>
+          <textarea placeholder="Describe functional decline pattern over time. Example: 'PPS declined from 50% to 30% over 60 days. Two aspiration events in 90 days. Weight loss 12 lbs in 6 months. No longer ambulates. Bed-bound greater than 50% of day.'"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: Goals of Care & Physician Attestation Context -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title">Goals of Care & Physician Attestation Context</div>
+    </div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="field">
+          <label>Code status</label>
+          <select><option>Select...</option><option>DNR/DNI documented</option><option>Full code</option><option>Comfort measures only (CMO)</option><option>POLST/MOLST — comfort focused</option><option>Not documented</option></select>
+        </div>
+        <div class="field">
+          <label>Advance directive on file?</label>
+          <select><option>Select...</option><option>Yes — Living will</option><option>Yes — Healthcare proxy/POA</option><option>Yes — POLST/MOLST</option><option>None on file</option></select>
+        </div>
+        <div class="field">
+          <label>Physician certification basis (42 CFR §418.22)</label>
+          <select><option>Select...</option><option>Terminal prognosis ≤6 months — documented</option><option>Prognosis stated verbally, not yet documented</option><option>Awaiting attending attestation</option><option>Attending disagrees with hospice eligibility</option></select>
+        </div>
+        <div class="field">
+          <label>Patient/family awareness of prognosis</label>
+          <select><option>Select...</option><option>Patient and family fully informed</option><option>Family aware — patient lacks capacity</option><option>Family not yet fully informed</option><option>Cultural or communication barrier present</option></select>
+        </div>
+        <div class="field col-span-2">
+          <label>Attestation narrative context (no PHI — clinical framing only)</label>
+          <textarea placeholder="Describe what the attending physician's attestation is based on — clinical findings, trajectory, specialist input, prognosis basis. Do not include physician name or patient identifiers."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: Reviewer Notes -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div class="section-title">Reviewer Clinical Notes & Audit Risk Flags</div>
+    </div>
+    <div class="section-body">
+      <div class="field" style="margin-bottom:1rem">
+        <label>Documentation gaps or copy-forward concerns noted</label>
+        <textarea placeholder="e.g. 'Nursing notes appear templated across multiple entries. FAST stage not documented by team — only referenced in physician CTI. No weight documented in last 30 days.'"></textarea>
+      </div>
+      <div class="field" style="margin-bottom:1rem">
+        <label>Audit risk indicators (check all identified)</label>
+        <div class="check-group">
+          <label><input type="checkbox"> Copy-forward language detected in clinical notes</label>
+          <label><input type="checkbox"> FAST/PPS score inconsistent across documents</label>
+          <label><input type="checkbox"> Missing IDG signature or frequency</label>
+          <label><input type="checkbox"> CTI not updated at recertification</label>
+          <label><input type="checkbox"> Functional improvement noted — eligibility questionable</label>
+          <label><input type="checkbox"> Medications inconsistent with comfort-focused goals</label>
+          <label><input type="checkbox"> No documented patient/family goals of care conversation</label>
+          <label><input type="checkbox"> Attending not face-to-face within required timeframe</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Overall reviewer clinical impression</label>
+        <textarea placeholder="Summarize your clinical impression of this case's hospice eligibility based on the data entered above. This becomes the HED engine input narrative."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- RUN HED -->
+  <div class="btn-row">
+    <button class="btn btn-primary" id="run-hed" onclick="runHED()">▶ Submit to HED Engine</button>
+    <button class="btn btn-secondary" onclick="clearForm()">↺ Clear Form</button>
+    <button class="btn btn-print" onclick="window.print()">⎙ Print Blank Form</button>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="verdict-box eligible" id="verdict-eligible">
+    <div class="verdict-label">✓ Clinical Data Suggests Eligibility Supported</div>
+    <div class="verdict-detail">Data entered indicates functional decline, LCD pathway criteria, and physician attestation context consistent with hospice eligibility under 42 CFR §418.22 and applicable LCD guidelines. Full HED narrative analysis recommended. This is a clinical decision-support tool — not a determination of eligibility.</div>
+  </div>
+  <div class="verdict-box borderline" id="verdict-borderline">
+    <div class="verdict-label">⚠ Borderline — Additional Documentation Recommended</div>
+    <div class="verdict-detail">One or more required clinical indicators are incomplete, absent, or inconsistent. Eligibility may be supportable but documentation strengthening is recommended before certification or recertification. Review Section 4 and Section 7 findings carefully.</div>
+  </div>
+  <div class="verdict-box not-eligible" id="verdict-not-eligible">
+    <div class="verdict-label">✗ Data as Entered Does Not Clearly Support Eligibility</div>
+    <div class="verdict-detail">Clinical data entered does not meet LCD threshold criteria as currently documented. Physician review recommended. Do not use this screen alone as basis for discharge or denial — this is a documentation guidance tool.</div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- REGULATORY FOOTER -->
+<div class="reg-footer">
+  <strong>Regulatory Basis:</strong> 42 CFR §418.22 (Certification of Terminal Illness) · 42 CFR §418.25 (Admission to Hospice) · CMS Medicare Benefit Policy Manual Chapter 9 ·
+  LCD L33393 (Dementia/Stroke) · LCD L33614 (Heart Disease) · LCD L33946 (Renal Disease) · 45 CFR §164.514(b) (HIPAA De-identification Safe Harbor) ·
+  ACHC Hospice Standards HOS1-HOS9 · OIG Hospice Audit Guidance 2023–2024<br>
+  <strong>CliniSight HED Engine v1.0</strong> — This form captures de-identified clinical data only. No PHI is collected, stored, or transmitted. For clinical decision support use only — not a substitute for physician clinical judgment.
+</div>
+
+<script>
+  function selectScale(id, btn, val) {
+    const row = btn.closest('.scale-row') || btn.parentElement;
+    row.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function selectFast(row, stage, sub, desc) {
+    document.querySelectorAll('.fast-row').forEach(r => r.classList.remove('selected'));
+    row.classList.add('selected');
+    const label = sub ? `Stage ${stage}${sub} — ${desc}` : `Stage ${stage} — ${desc}`;
+    document.getElementById('fast-display').value = label;
+  }
+
+  function showPanel(id, tab) {
+    document.querySelectorAll('.pathway-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.pathway-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    tab.classList.add('active');
+  }
+
+  function runHED() {
+    // Simple logic preview — full API integration in CliniSight portal
+    const ppsActive = document.querySelector('#pps-row .scale-btn.active');
+    const fastVal = document.getElementById('fast-display').value;
+    const ppsVal = ppsActive ? parseInt(ppsActive.textContent) : null;
+
+    let verdict = 'borderline';
+    if (ppsVal !== null && ppsVal <= 50 && fastVal.includes('7')) verdict = 'eligible';
+    else if (ppsVal !== null && ppsVal >= 70) verdict = 'not-eligible';
+
+    document.getElementById('verdict-eligible').classList.remove('show');
+    document.getElementById('verdict-borderline').classList.remove('show');
+    document.getElementById('verdict-not-eligible').classList.remove('show');
+    document.getElementById('verdict-' + verdict).classList.add('show');
+    document.getElementById('verdict-' + verdict).scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  function clearForm() {
+    if (confirm('Clear all form data? This cannot be undone.')) {
+      document.querySelectorAll('input[type=text], input[type=number], input[type=date], textarea').forEach(el => el.value = '');
+      document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+      document.querySelectorAll('input[type=checkbox], input[type=radio]').forEach(el => el.checked = false);
+      document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.fast-row').forEach(r => r.classList.remove('selected'));
+      document.getElementById('fast-display').value = '';
+      ['eligible','borderline','not-eligible'].forEach(v => document.getElementById('verdict-'+v).classList.remove('show'));
+    }
+  }
+</script>
+</body>
+</html>
